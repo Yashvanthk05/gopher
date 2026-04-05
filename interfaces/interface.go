@@ -5,7 +5,8 @@ import ("fmt";"math")
 // interfaces are collection of method signatures
 // interface - collection of method definitions (no implementation)
 
-// achieve polymorphism
+// achieve polymorphism by using interface as a function parameter
+// polymorphism means one function can work with multiple types
 // same function for multiple types - less duplication
 // decoupling - code that depends on behavior, not concrete types
 
@@ -31,7 +32,7 @@ func (r Rect) Area() float64{
 }
 
 // interfaces are implicitly implemented
-
+// one function works for many type
 func printArea(s Shape){
 	fmt.Println(s.Area())
 }
@@ -64,6 +65,11 @@ type ReaderWriter interface{
 	Scan()
 }
 
+// empty interface - accepts value of any type
+func printValue(v interface{}){
+	fmt.Println(v)
+}
+
 func main(){
 	c1 := Circle{10}
 	printArea(c1)
@@ -93,4 +99,7 @@ func main(){
 	}else {
 		fmt.Println("It is not a Scanner Type")
 	}
+	printValue("yashvanth")
+	printValue(10)
+	printValue(10.23232)
 }
