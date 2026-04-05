@@ -21,7 +21,7 @@ type employee struct {
 }
 
 type manager struct {
-	employee   // embedding the employee struct into the manager struct
+	employee   // embedding the employee struct - achievees composition (reusing behavior) instead of inheritance
 	department string
 }
 
@@ -34,7 +34,22 @@ type earth struct {
 	people []person
 }
 
+// struct tags - metadata annotations attached to struct fields (used by libraries such as JSON, ORM, validators)
+
+type Person struct {
+	Name 		string	`json:"name" db:"name"`
+	Age 		int 	`json:"age,omitempty"`
+	Password	string	`json:"-" db:"password"`	 
+}
+
+// using tags {"name":"John","age":25}
+// without tags {"Name":"John","Age":25}
+// rename field - Name string `json:"full_name"`
+// Omit empty values - Age int `json:"age,omitempty"`
+// ignore field - Password string `json:"-"`
+
 func main() {
+	// struct are value type
 	stud1 := student{name: "yashvanth", rollno: 1589}
 	fmt.Println(stud1)
 	// creating an instance of the nessted college struct and initializing it with values
@@ -44,12 +59,15 @@ func main() {
 	college1.student.name = "yashvanth"
 	college1.student.rollno = 1589
 
-	stud2 := student{
-		name:   "kali",
-		rollno: 1320,
-	}
+	// positional struct literal and pointer to struct
+	stud2 := &student{"kali",1320}
+	// another way to create pointer
+	stud3 := new(student)
+	
+	fmt.Println(stud3)
 
-	fmt.Println(stud2)
+	// go automatically dereferences pointer to struct
+	fmt.Println(stud2.name)
 
 	col2 := college{
 		name:     "vit",
@@ -85,12 +103,25 @@ func main() {
 	manager1.department = "Sales"
 	fmt.Println(manager1)
 
+	manager2 := manager{
+		employee: employee{
+			name: "yashvanth",
+			age: 21,
+		},
+		department: "scope",
+	}
+
+	fmt.Println(manager2)
+	// Go approach (composition)
+	// manager has a employee
+
 	// creating an instance of the earth struct and initializing it with a slice of person structs
 	earth1 := earth{}
+	// named struct literal
 	earth1.people = []person{
 		{name: "Alice", age: 30},
 		{name: "Bob", age: 25},
 		{name: "Charlie", age: 35},
 	}
-	fmt.Println(earth1)
+	fmt.Println(earth1.people[0].name)
 }
